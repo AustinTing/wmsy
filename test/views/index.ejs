@@ -1,0 +1,13 @@
+<!-- views/pages/superheroes.ejs -->
+<head>
+  <title>HTML TEST</title>
+  <style>  
+    h1{color:red;}
+  </style>
+</head>
+<h1><%= title %></h1>
+<ul>
+<% for (var i=0; i<superheroes.length; i++) {%>
+    <p><%= superheroes[i] %></p>
+<% } %>
+</ul>

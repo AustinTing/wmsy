@@ -18,6 +18,8 @@
   "homepage": "https://github.com/AustinTing/wmsy#readme",
   "dependencies": {
     "dotenv": "^8.0.0",
-    "express": "^4.16.4"
+    "ejs": "^2.6.1",
+    "express": "^4.16.4",
+    "open": "^6.3.0"
   }
 }
