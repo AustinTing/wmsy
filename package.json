@@ -1,25 +1,16 @@
 {
-  "name": "wmsy",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "wmsyy",
+  "version": "0.0.0",
+  "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node ./bin/www"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/AustinTing/wmsy.git"
-  },
-  "author": "Austin Ting",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/AustinTing/wmsy/issues"
-  },
-  "homepage": "https://github.com/AustinTing/wmsy#readme",
   "dependencies": {
-    "dotenv": "^8.0.0",
-    "ejs": "^2.6.1",
-    "express": "^4.16.4",
-    "open": "^6.3.0"
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.6.9",
+    "ejs": "~2.5.7",
+    "express": "~4.16.0",
+    "http-errors": "~1.6.2",
+    "morgan": "~1.9.0"
   }
 }
