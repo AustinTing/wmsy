@@ -1,6 +1,10 @@
+const logger = require('../logger').getLogger('bookCountroller')
+const { book, book_instance: bookInstance, author, genre } = require('../database/models')
+
 // Display list of all BookInstances.
-exports.bookinstance_list = function (req, res) {
-  res.send('NOT IMPLEMENTED: BookInstance list')
+exports.bookinstance_list = async (req, res) => { 
+  const bookInstances = await bookInstance.findAll()
+  res.render('bookinstance_list', { title: 'Book Instance List', bookinstance_list: bookInstances });
 }
 
 // Display detail page for a specific BookInstance.
