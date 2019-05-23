@@ -1,6 +1,22 @@
+const _ = require('lodash')
+const logger = require('../logger').getLogger('bookCountroller')
+const { book, book_instance: bookInstance, author, genre } = require('../database/models')
 
-exports.index = function (req, res) {
-  res.render('index', { title: 'lalala' })
+exports.index = async (req, res) => {
+  const data = _.zipObject([
+    'book_count',
+    'book_instance_count',
+    'book_instance_available_count',
+    'author_count', 'genre_count'],
+  await Promise.all([
+    book.count(),
+    bookInstance.count(),
+    bookInstance.count({ where: { status: 'Available' } }),
+    author.count(),
+    genre.count()
+  ]))
+  logger.debug(data)
+  res.render('index', { title: 'lalala', data })
 }
 
 // Display list of all books.
