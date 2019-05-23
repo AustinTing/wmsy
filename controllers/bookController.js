@@ -20,8 +20,12 @@ exports.index = async (req, res) => {
 }
 
 // Display list of all books.
-exports.book_list = function (req, res) {
-  res.send('NOT IMPLEMENTED: Book list')
+exports.book_list = async (req, res) => {
+  const data = {
+    title: 'Book List',
+    book_list: await book.findAll()
+  }
+  res.render('book_list', data)
 }
 
 // Display detail page for a specific book.

@@ -16,6 +16,8 @@ module.exports = function (sequelize, DataTypes) {
       allowNull: true
     }
   }, {
-    tableName: 'genre'
+    tableName: 'genre',
+    createdAt: 'created_at',
+    updatedAt: 'updated_at'
   })
 }

@@ -28,6 +28,8 @@ module.exports = function (sequelize, DataTypes) {
       allowNull: true
     }
   }, {
-    tableName: 'book_instance'
+    tableName: 'book_instance',
+    createdAt: 'created_at',
+    updatedAt: 'updated_at'
   })
 }
