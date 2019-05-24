@@ -1,5 +1,6 @@
 const { body, validationResult } = require('express-validator/check')
 const { sanitizeBody } = require('express-validator/filter')
+const { genre } = require('../database/models')
 
 // Display list of all Genre.
 exports.genre_list = function (req, res) {
@@ -23,34 +24,25 @@ exports.genre_create_post = [
   // Sanitize (trim and escape) the name field.
   sanitizeBody('name').trim().escape(),
   // Process request after validation and sanitization.
-  (req, res, next) => {
+  async (req, res, next) => {
     // Extract the validation errors from a request.
     const errors = validationResult(req)
     // Create a genre object with escaped and trimmed data.
-    var genre = new Genre(
-      { name: req.body.name }
-    )
+    const newGenre = {
+      name: req.body.name
+    }
     if (!errors.isEmpty()) {
       // There are errors. Render the form again with sanitized values/error messages.
-      res.render('genre_form', { title: 'Create Genre', genre: genre, errors: errors.array() })
+      res.render('genre_form', { title: 'Create Genre', genre, errors: errors.array() })
     } else {
       // Data from form is valid.
       // Check if Genre with same name already exists.
-      Genre.findOne({ 'name': req.body.name })
-        .exec(function (err, found_genre) {
-          if (err) { return next(err) }
-
-          if (found_genre) {
-            // Genre exists, redirect to its detail page.
-            res.redirect(found_genre.url)
-          } else {
-            genre.save(function (err) {
-              if (err) { return next(err) }
-              // Genre saved. Redirect to genre detail page.
-              res.redirect(genre.url)
-            })
-          }
-        })
+      const dbGenre = await genre.findOne({ where: { name: req.body.name } })
+      if (dbGenre) return res.redirect(dbGenre.url)
+      const createdGenre = await genre.create(newGenre)
+      createdGenre['url'] = `/catalog/genre/${createdGenre.id}`
+      await createdGenre.save()
+      return res.redirect(createdGenre.url)
     }
   }
 ]
