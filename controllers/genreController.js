@@ -1,7 +1,8 @@
+const _ = require('lodash')
 const { body, validationResult } = require('express-validator/check')
 const { sanitizeBody } = require('express-validator/filter')
 const { genre } = require('../database/models')
-
+const logger = require('../logger').getLogger('genreController')
 // Display list of all Genre.
 exports.genre_list = function (req, res) {
   res.send('NOT IMPLEMENTED: Genre list')
@@ -14,6 +15,7 @@ exports.genre_detail = function (req, res) {
 
 // Display Genre create form on GET.
 exports.genre_create_get = function (req, res, next) {
+  logger.debug(`genre_create_get`)
   res.render('genre_form', { title: 'Create Genre' })
 }
 
@@ -25,15 +27,18 @@ exports.genre_create_post = [
   sanitizeBody('name').trim().escape(),
   // Process request after validation and sanitization.
   async (req, res, next) => {
+    logger.debug(`genre_create_post, req: ${JSON.stringify(req.body)}`)
     // Extract the validation errors from a request.
     const errors = validationResult(req)
     // Create a genre object with escaped and trimmed data.
     const newGenre = {
       name: req.body.name
     }
-    if (!errors.isEmpty()) {
+    logger.debug(`errors is empty: ${_.isEmpty(errors.array())}, errors: ${JSON.stringify(errors.array())}`)
+    if (!_.isEmpty(errors.array())) {
       // There are errors. Render the form again with sanitized values/error messages.
-      res.render('genre_form', { title: 'Create Genre', genre, errors: errors.array() })
+      logger.warn(`genre_create_post, errors: ${JSON.stringify(errors)}, genre: ${JSON.stringify(newGenre)}`)
+      res.render('genre_form', { title: 'Create Genre', genre: newGenre, errors: errors.array() })
     } else {
       // Data from form is valid.
       // Check if Genre with same name already exists.
