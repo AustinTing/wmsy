@@ -34,7 +34,6 @@ exports.genre_create_post = [
     const newGenre = {
       name: req.body.name
     }
-    logger.debug(`errors is empty: ${_.isEmpty(errors.array())}, errors: ${JSON.stringify(errors.array())}`)
     if (!_.isEmpty(errors.array())) {
       // There are errors. Render the form again with sanitized values/error messages.
       logger.warn(`genre_create_post, errors: ${JSON.stringify(errors)}, genre: ${JSON.stringify(newGenre)}`)
