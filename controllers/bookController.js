@@ -1,4 +1,5 @@
 const _ = require('lodash')
+const r = require('ramda')
 const logger = require('../logger').getLogger('bookCountroller')
 const { book, book_instance: bookInstance, author, genre } = require('../database/models')
 
@@ -33,15 +34,23 @@ exports.book_detail = function (req, res) {
   res.send('NOT IMPLEMENTED: Book detail: ' + req.params.id)
 }
 
+const toAuthor = author => {
+  author['name'] = author.first_name + ', ' + author.family_name
+  return author
+}
+
+const findAuthor = async () => {
+  const dbAuthors = await author.findAll()
+  return _.map(dbAuthors, toAuthor)
+}
+
 // Display book create form on GET.
 exports.book_create_get = async (req, res) => {
-  const data = _.zipObject([
-    'authors',
-    'genres'],
-  await Promise.all([
-    author.findAll(),
-    genre.findAll() ]))
-  res.render('book_form', { title: 'Create Book', ...data })
+  logger.info(`book_create_get`)
+  const dataKeys = ['authors', 'genres']
+  const dataValues = await Promise.all([findAuthor(), genre.findAll({ raw: true })])
+  const data = _.zipObject(dataKeys, dataValues)
+  res.render('book_form', { title: 'Create Book', ...data }) // if no ...data -> {data}
 }
 
 // Handle book create on POST.
