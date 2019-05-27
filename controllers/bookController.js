@@ -34,8 +34,14 @@ exports.book_detail = function (req, res) {
 }
 
 // Display book create form on GET.
-exports.book_create_get = function (req, res) {
-  res.send('NOT IMPLEMENTED: Book create GET')
+exports.book_create_get = async (req, res) => {
+  const data = _.zipObject([
+    'authors',
+    'genres'],
+  await Promise.all([
+    author.findAll(),
+    genre.findAll() ]))
+  res.render('book_form', { title: 'Create Book', ...data })
 }
 
 // Handle book create on POST.
