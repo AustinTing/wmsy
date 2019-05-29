@@ -1,7 +1,7 @@
 const _ = require('lodash')
 // const r = require('ramda')
 const { body, validationResult } = require('express-validator/check')
-const { sanitizeBody } = require('express-validator/filter')
+// const { sanitizeBody } = require('express-validator/filter')
 const logger = require('../logger').getLogger('bookCountroller')
 const { book: Book, book_instance: bookInstance, author, genre } = require('../database/models')
 
