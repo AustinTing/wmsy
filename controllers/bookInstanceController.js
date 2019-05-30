@@ -5,7 +5,7 @@ const { book: Book, book_instance: BookInstance } = require('../database/models'
 
 // Display list of all BookInstances.
 exports.bookinstance_list = async (req, res) => {
-  const bookInstances = await bookInstance.findAll()
+  const bookInstances = await BookInstance.findAll()
   res.render('bookinstance_list', { title: 'Book Instance List', bookinstance_list: bookInstances })
 }
 

@@ -1,7 +1,7 @@
 const _ = require('lodash')
 const { body, validationResult } = require('express-validator/check')
 const { sanitizeBody } = require('express-validator/filter')
-const { author } = require('../database/models')
+const { author: Author, book: Book } = require('../database/models')
 const logger = require('../logger').getLogger('authorController')
 // Display list of all Authors.
 exports.author_list = function (req, res) {
@@ -52,9 +52,9 @@ exports.author_create_post = [
 
     // Data from form is valid.
     // Check if author with same name already exists.
-    const dbAuthor = await author.findOne({ where: newAuthor })
+    const dbAuthor = await Author.findOne({ where: newAuthor })
     if (dbAuthor) return res.redirect(dbAuthor.url)
-    const createdAuthor = await author.create(newAuthor)
+    const createdAuthor = await Author.create(newAuthor)
     createdAuthor['url'] = `/catalog/author/${createdAuthor.id}`
     await createdAuthor.save()
     return res.redirect(createdAuthor.url)
@@ -63,8 +63,15 @@ exports.author_create_post = [
 ]
 
 // Display Author delete form on GET.
-exports.author_delete_get = function (req, res) {
-  res.send('NOT IMPLEMENTED: Author delete GET')
+exports.author_delete_get = async (req, res) => {
+  const { id: authorId } = req.params
+  const author = await Author.findOne({ where: { id: authorId }, raw: true })
+  const authorBooks = await Book.findAll({ where: { author_id: authorId } })
+  if (!author) { // No results.
+    return res.redirect('/catalog/authors')
+  }
+  // Successful, so render.
+  res.render('author_delete', { title: 'Delete Author', author: author, author_books: authorBooks })
 }
 
 // Handle Author delete on POST.

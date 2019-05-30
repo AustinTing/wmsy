@@ -18,6 +18,7 @@ exports.index = async (req, res) => {
     author.count(),
     genre.count()
   ]))
+  data['a'] = 111111111111
   logger.debug(data)
   res.render('index', { title: 'lalala', data })
 }
