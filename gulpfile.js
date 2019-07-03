@@ -1,17 +1,16 @@
 var gulp = require('gulp')
-var browserSync = require('browser-sync')
+var browserSync = require('browser-sync').create()
 var nodemon = require('gulp-nodemon')
-
 const browserInit = cb => {
-  console.log(`browserInit`)
-  browserSync.init(null, {
-    proxy: 'http://localhost:4000',
-    files: ['public/**/*.*', 'views/*'],
-    browser: 'google chrome',
-    port: 3000
-  })
-  cb()
+  // browserSync.init(null, {
+  //   proxy: 'localhost:4000',
+  //   files: ['public/**/*.*', 'views/*'],
+  //   browser: 'google chrome',
+  //   port: 3000
+  // })
+  // return browserSync.watch('app.js', browserSync.reload)
 }
+
 const nodemonStart = cb => {
   var started = false
   console.log(`nodemonStart`)
@@ -23,10 +22,10 @@ const nodemonStart = cb => {
     if (!started) {
       setTimeout(() => {
         cb()
-      }, 1000)
+      }, 3000)
       started = true
     }
   })
 }
 
-exports.default = gulp.series(nodemonStart, browserInit)
+exports.default = gulp.series(browserInit)
